@@ -6,7 +6,6 @@
     <title>Ejercicio 3 - Registro de Personas (React)</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -33,21 +32,21 @@
 
     <div id="root"></div>
 
-    <script type="text/babel">
+    <script>
         const { useState } = React;
 
         function App() {
             const [personas, setPersonas] = useState([]);
             const [form, setForm] = useState({ nombre: '', apellido: '', edad: '', altura: '', peso: '' });
 
-            const handleChange = (e) => {
+            function handleChange(e) {
                 setForm({ ...form, [e.target.id]: e.target.value });
-            };
+            }
 
-            const handleSubmit = (e) => {
+            function handleSubmit(e) {
                 e.preventDefault();
                 const { nombre, apellido, edad, altura, peso } = form;
-                
+
                 const altNum = parseFloat(altura);
                 const pesoNum = parseFloat(peso);
                 const imcCalculado = (pesoNum / (altNum * altNum)).toFixed(2);
@@ -56,78 +55,99 @@
                     id: Date.now(),
                     nombre,
                     apellido,
-                    edad: parseInt(edad),
+                    edad: parseInt(edad, 10),
                     altura: altNum,
                     peso: pesoNum,
                     imc: imcCalculado
                 };
 
                 setPersonas([...personas, nuevaPersona]);
-                setForm({ nombre: '', apellido: '', edad: '', altura: '', peso: '' }); // Limpiar formulario
-            };
+                setForm({ nombre: '', apellido: '', edad: '', altura: '', peso: '' });
+            }
 
-            const handleEliminar = (id) => {
-                setPersonas(personas.filter(p => p.id !== id));
-            };
+            function handleEliminar(id) {
+                setPersonas(personas.filter((p) => p.id !== id));
+            }
 
-            return (
-                <div className="main-container">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Nombre:</label>
-                            <input type="text" id="nombre" value={form.nombre} onChange={handleChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label>Apellido:</label>
-                            <input type="text" id="apellido" value={form.apellido} onChange={handleChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label>Edad:</label>
-                            <input type="number" id="edad" value={form.edad} onChange={handleChange} required min="0" />
-                        </div>
-                        <div className="form-group">
-                            <label>Altura (m):</label>
-                            <input type="number" id="altura" step="0.01" value={form.altura} onChange={handleChange} required min="0.5" max="2.5" />
-                        </div>
-                        <div className="form-group">
-                            <label>Peso (kg):</label>
-                            <input type="number" id="peso" step="0.1" value={form.peso} onChange={handleChange} required min="10" max="300" />
-                        </div>
-                        <button type="submit" className="btn-submit">Agregar</button>
-                    </form>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Edad</th>
-                                <th>Altura</th>
-                                <th>Peso</th>
-                                <th>IMC</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {personas.map(p => (
-                                <tr key={p.id}>
-                                    <td>{p.nombre}</td>
-                                    <td>{p.apellido}</td>
-                                    <td>{p.edad}</td>
-                                    <td>{p.altura} m</td>
-                                    <td>{p.peso} kg</td>
-                                    <td><strong>{p.imc}</strong></td>
-                                    <td><button className="btn-delete" onClick={() => handleEliminar(p.id)}>Quitar</button></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+            return React.createElement(
+                'div',
+                { className: 'main-container' },
+                React.createElement(
+                    'form',
+                    { onSubmit: handleSubmit },
+                    React.createElement(
+                        'div',
+                        { className: 'form-group' },
+                        React.createElement('label', null, 'Nombre:'),
+                        React.createElement('input', { type: 'text', id: 'nombre', value: form.nombre, onChange: handleChange, required: true })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'form-group' },
+                        React.createElement('label', null, 'Apellido:'),
+                        React.createElement('input', { type: 'text', id: 'apellido', value: form.apellido, onChange: handleChange, required: true })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'form-group' },
+                        React.createElement('label', null, 'Edad:'),
+                        React.createElement('input', { type: 'number', id: 'edad', value: form.edad, onChange: handleChange, required: true, min: '0' })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'form-group' },
+                        React.createElement('label', null, 'Altura (m):'),
+                        React.createElement('input', { type: 'number', id: 'altura', step: '0.01', value: form.altura, onChange: handleChange, required: true, min: '0.5', max: '2.5' })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'form-group' },
+                        React.createElement('label', null, 'Peso (kg):'),
+                        React.createElement('input', { type: 'number', id: 'peso', step: '0.1', value: form.peso, onChange: handleChange, required: true, min: '10', max: '300' })
+                    ),
+                    React.createElement('button', { type: 'submit', className: 'btn-submit' }, 'Agregar')
+                ),
+                React.createElement(
+                    'table',
+                    null,
+                    React.createElement(
+                        'thead',
+                        null,
+                        React.createElement('tr', null,
+                            React.createElement('th', null, 'Nombre'),
+                            React.createElement('th', null, 'Apellido'),
+                            React.createElement('th', null, 'Edad'),
+                            React.createElement('th', null, 'Altura'),
+                            React.createElement('th', null, 'Peso'),
+                            React.createElement('th', null, 'IMC'),
+                            React.createElement('th', null, 'Acciones')
+                        )
+                    ),
+                    React.createElement(
+                        'tbody',
+                        null,
+                        personas.map((p) =>
+                            React.createElement(
+                                'tr',
+                                { key: p.id },
+                                React.createElement('td', null, p.nombre),
+                                React.createElement('td', null, p.apellido),
+                                React.createElement('td', null, p.edad),
+                                React.createElement('td', null, p.altura + ' m'),
+                                React.createElement('td', null, p.peso + ' kg'),
+                                React.createElement('td', null, React.createElement('strong', null, p.imc)),
+                                React.createElement('td', null,
+                                    React.createElement('button', { className: 'btn-delete', onClick: () => handleEliminar(p.id) }, 'Quitar')
+                                )
+                            )
+                        )
+                    )
+                )
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(React.createElement(App));
     </script>
 </body>
 </html>
