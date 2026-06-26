@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2 - Registro de Personas (DOM)</title>
+    <style>
+        
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-nav { text-decoration: none; background: #666; color: white; padding: 10px 15px; border-radius: 5px; }
+        .main-container { display: flex; flex-direction: column; gap: 30px; max-width: 800px; margin: 0 auto; }
+        form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-wrap: wrap; gap: 15px; }
+        .form-group { flex: 1 1 180px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-weight: bold; }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-submit { background: #2e7d32; color: white; border: none; cursor: pointer; font-weight: bold; align-self: flex-end; height: 38px; padding: 0 20px; border-radius: 4px; }
+        .btn-submit:hover { background: #1b5e20; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007acc; color: white; }
+        .btn-delete { background: #c62828; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .btn-delete:hover { background: #b71c1c; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Administración de Personas (Nativo)</h1>
+        <a href="index.html" class="btn-nav">Volver al Inicio</a>
+    </header>
+
+    <div class="main-container">
+        <form id="form-persona">
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input type="text" id="nombre" required>
+            </div>
+            <div class="form-group">
+                <label>Apellido:</label>
+                <input type="text" id="apellido" required>
+            </div>git add personas.html react.html
+            <div class="form-group">
+                <label>Edad:</label>
+                <input type="number" id="edad" required min="0">
+            </div>
+            <div class="form-group">
+                <label>Altura (m):</label>
+                <input type="number" id="altura" step="0.01" required min="0.5" max="2.5">
+            </div>
+            <div class="form-group">
+                <label>Peso (kg):</label>
+                <input type="number" id="peso" step="0.1" required min="10" max="300">
+            </div>
+            <button type="submit" class="btn-submit">Agregar</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>IMC</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-personas"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const form = document.getElementById('form-persona');
+        const tbody = document.getElementById('tbody-personas');
+        let listaPersonas = [];
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const edad = parseInt(document.getElementById('edad').value);
+            const altura = parseFloat(document.getElementById('altura').value);
+            const peso = parseFloat(document.getElementById('peso').value);
+            
+            // Cálculo del IMC: peso / (altura^2)
+            const imc = (peso / (altura * altura)).toFixed(2);
+
+            const nuevaPersona = { id: Date.now(), nombre, apellido, edad, altura, peso, imc };
+            listaPersonas.push(nuevaPersona);
+            
+            actualizarTabla();
+            form.reset();
+        });
+
+        function eliminarPersona(id) {
+            listaPersonas = listaPersonas.filter(p => p.id !== id);
+            actualizarTabla();
+        }
+
+        function actualizarTabla() {
+            tbody.innerHTML = "";
+            listaPersonas.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${p.nombre}</td>
+                    <td>${p.apellido}</td>
+                    <td>${p.edad}</td>
+                    <td>${p.altura} m</td>
+                    <td>${p.peso} kg</td>
+                    <td><strong>${p.imc}</strong></td>
+                    <td><button class="btn-delete" onclick="eliminarPersona(${p.id})">Quitar</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>

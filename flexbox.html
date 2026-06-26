@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio 1 - flexbox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn-nav {
+            text-decoration: none;
+            background: #666;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover { background-color: #005999; }
+        
+        /*Contenedor Flexbox*/
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        /*Elementos del contenedor*/
+        .card {
+            flex: 1 1 250px;
+            max-width: 300px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card h3 { margin-top: 0; color: #333; }
+        .price { font-weight: bold; color: #2e7d32; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Catálogo de Productos</h1>
+        <a href="index.html" class="btn-nav">Volver al Inicio</a>
+    </header>
+
+    <div class="controls">
+        <button id="btn-filter">Mostrar solo económicos (< $50000)</button>
+    </div>
+
+    <div id="container" class="grid-container"></div>
+
+    <script>
+        const productos = [
+            { id: 1, nombre: "Teclado Mecánico", tipo: "Periférico", precio: 51850 },
+            { id: 2, nombre: "Mouse Gamer", tipo: "Periférico", precio: 46800 },
+            { id: 3, nombre: "Monitor 24 pulgadas", tipo: "Pantallas", precio: 215000 },
+            { id: 4, nombre: "Cable HDMI", tipo: "Accesorios", precio: 15000 },
+            { id: 5, nombre: "Auriculares Gamer", tipo: "Audio", precio: 70500 },
+            { id: 6, nombre: "Pad para Mouse", tipo: "Accesorios", precio: 30000 }
+        ];
+
+        const container = document.getElementById('container');
+        const btnFilter = document.getElementById('btn-filter');
+        let filtrado = false;
+
+        function renderizarProductos(lista) {
+            container.innerHTML = "";
+            lista.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div>
+                        <h3>${prod.nombre}</h3>
+                        <p>Categoría: ${prod.tipo}</p>
+                    </div>
+                    <p class="price">$${prod.precio}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        btnFilter.addEventListener('click', () => {
+            filtrado = !filtrado;
+            if (filtrado) {
+                const económicos = productos.filter(p => p.precio < 50000);
+                renderizarProductos(económicos);
+                btnFilter.textContent = "Mostrar Todos";
+            } else {
+                renderizarProductos(productos);
+                btnFilter.textContent = "Mostrar solo económicos (< $50000)";
+            }
+        });
+
+        //Carga inicial
+        renderizarProductos(productos);
+    </script>
+</body>
+</html>
